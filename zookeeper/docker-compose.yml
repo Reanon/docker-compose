@@ -1,0 +1,65 @@
+# 指定 compose 文件的版本
+version: '2'
+services:
+  zk1:
+    # 使用的镜像
+    image: wurstmeister/zookeeper
+    # 当 Docker 重启时，该容器重启
+    restart: always
+    # 类似于在基于 Linux 虚拟机 Kafka 集群中 hosts 文件的值
+    hostname: zk1
+    container_name: zk1
+    # 端口映射
+    ports:
+      - "2181:2181"
+    # 文件挂载
+    volumes:
+      - "/opt/docker/zookeeper/zk1/data:/data" # “:”前改成自己的目录
+      - "/opt/docker/zookeeper/zk1/datalog:/datalog" # “:”前改成自己的目录
+    # 集群环境
+    environment:
+      # 当前 Zookeeper 实例的 id
+      ZOO_MY_ID: 1
+      # 集群节点
+      ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
+    # 使用的网络配置
+    networks:
+      default:
+        ipv4_address: 172.69.0.21
+  zk2:
+    image: wurstmeister/zookeeper
+    restart: always
+    hostname: zk2
+    container_name: zk2
+    ports:
+      - "2182:2181"
+    volumes:
+      - "/opt/docker/zookeeper/zk2/data:/data"
+      - "/opt/docker/zookeeper/zk2/datalog:/datalog"
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
+    networks:
+      default:
+        ipv4_address: 172.69.0.22
+  zk3:
+    image: wurstmeister/zookeeper
+    restart: always
+    hostname: zk3
+    container_name: zk3
+    ports:
+      - "2183:2181"
+    volumes:
+      - "/opt/docker/zookeeper/zk3/data:/data"
+      - "/opt/docker/zookeeper/zk3/datalog:/datalog"
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
+    networks:
+      default:
+        ipv4_address: 172.69.0.23
+# 网络
+networks:
+  default:
+    external:
+      name: kafka_zoo

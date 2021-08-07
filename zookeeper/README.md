@@ -18,7 +18,7 @@ $ chmod +x /usr/local/bin/docker-compose
 2、下载当前`docker-compose.yml`
 
 ```shell
-
+wget https://raw.githubusercontent.com/Reanon/docker-compose/main/zookeeper/docker-compose.yml
 ```
 
 3、新建 Docker 网络

@@ -27,8 +27,8 @@ docker-compose --version
 
 2、下载当前`docker-compose.yml`
 
-```
-
+```shell
+wget   https://raw.githubusercontent.com/Reanon/docker-compose/main/kafka/docker-compose.yml
 ```
 
 3、新建 Docker 网络
